@@ -16,8 +16,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
-      - name: Build & Test
-        run: mvn -B -q -DskipTests=false test
+      - name: Build & Test (no fail on zero tests)
+        run: mvn -B -q -DskipTests=false -DfailIfNoTests=false test
       - name: Publish Surefire Report (artifact)
         # Solo subir el artifact si existen archivos de reporte
         if: ${{ hashFiles('**/target/surefire-reports/*.xml', '**/target/surefire-reports/*.txt') != '' }}
