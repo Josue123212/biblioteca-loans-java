@@ -7,8 +7,21 @@ Completa los campos y adjunta capturas según se requiera.
 
 ## 2) CI en GitHub Actions
 - Captura (PNG) del run en verde: Adjuntar imagen aquí
-- Enlace directo al run: https://github.com/Steven12215/biblioteca-loans-java/actions/runs/19251200293
-- Artifact surefire-reports: no generado en este laboratorio (la clase integral se llama `LoanFlowIT` y por convención de Surefire las `*IT` no se ejecutan con `mvn test`).
+- Enlace directo al run: https://github.com/Steven12215/biblioteca-loans-java/actions/runs/19251451331
+- Enlace del job (detalle de pasos): https://github.com/Steven12215/biblioteca-loans-java/actions/runs/19251451331/job/55037124085
+- Artifact surefire-reports: publicado y descargable desde el run (se ejecutó explícitamente `LoanFlowIT` en CI). Contiene archivos `target/surefire-reports/*.xml` y/o `*.txt`.
+
+### Cambio requerido (y razón)
+- Archivo modificado: `.github/workflows/ci.yml`.
+- Cambio aplicado: se añadió un paso para ejecutar explícitamente la prueba integral `LoanFlowIT`, manteniendo el resto del flujo sin cambios en nombres de clases ni en `pom.xml`.
+
+```yaml
+- name: Run LoanFlowIT explicitly
+  run: mvn -B -DskipTests=false -DfailIfNoTests=false -Dtest=LoanFlowIT test
+```
+
+- Motivo: Por convención del plugin Surefire, las clases `*IT` no se ejecutan con `mvn test` por defecto. Para evidenciar las pruebas integrales en CI sin renombrar la clase ni alterar el `pom.xml`, se ejecuta `LoanFlowIT` de forma explícita en el pipeline.
+- Resultado: run de CI en verde (#3) y artifact `surefire-reports` publicado con el resumen de la ejecución.
 
 ## 3) Reporte de pruebas
 - Resumen de `mvn -DskipTests=false test` (copiar output relevante) o contenido de `target/surefire-reports/*.txt`.
@@ -21,5 +34,5 @@ Puedes reemplazar este texto por tu reflexión propia manteniendo el límite de 
 ## Checklist
 - [x] Repo accesible y con estructura: `pom.xml`, `src/main/java/...`, `src/test/java/...`, `.github/workflows/ci.yml`.
 - [x] Capturas del pipeline y enlace directo.
-- [ ] Reporte surefire adjunto o accesible. (No aplica en esta configuración: `LoanFlowIT` no corre con `mvn test` por convención.)
+- [x] Reporte surefire adjunto o accesible (artifact publicado en el run que ejecuta `LoanFlowIT`).
 - [x] Reflexión agregada.
